@@ -111,6 +111,10 @@ def process_domain(domain):
         pass
 
 if __name__ == '__main__':
+    if not os.path.exists('.\\out\\'):
+        os.makedirs('.\\out\\')
+    if not os.path.exists('.\\re\\'):
+        os.makedirs('.\\re\\')
     domainl = input("请输入扫描的子域名列表: ")
     domainl = open(domainl, 'r')
     domains = [domain.replace('\n', '') for domain in domainl.readlines()]
