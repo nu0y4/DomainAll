@@ -98,15 +98,6 @@ def get_fofa(domain):
             print("请求出错，正在尝试重新请求...", e)
     return fofa_domain
 
-def get_shodan(domain):
-    import shodan
-    temp_list = []
-    api = shodan.Shodan(API_KEY)
-    results = api.search('hostname:' + domain, limit=1000, minify=True)
-    for match in results["matches"]:
-        add2list(match["hostnames"], temp_list)
-    out_list = filter_list(temp_list, domain)
-    return out_list
 
 
 def run_oneforall(domain):

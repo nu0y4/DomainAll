@@ -1,15 +1,13 @@
-import json
+import os
 import os
 import sys
 import time
-import threading
-
-
-from func import getsubdata, get_fofa, get_shodan, add2list, run_subdomains_brute, dnsx, 删除换行符, asset
-# from lib.JSFinder.JSFinder import find_subdomain, find_by_url
 import warnings
 
-from DomainAll.lib.OneForAll.test import oneforall
+from colorama import Fore
+
+from lib.OneForAll.test import oneforall
+from func import getsubdata, get_fofa, add2list, run_subdomains_brute, dnsx, 删除换行符, asset
 
 warnings.filterwarnings("ignore")
 
@@ -36,26 +34,21 @@ def process_domain(domain):
             contont = getsubdata(contont)
     else:
         print('[+]读取失败')
-    # fofa
-    fofa = get_fofa(domain)
-    fofa_new = [fofa_g.replace('http://', '').replace('https://', '') for fofa_g in fofa]
 
-    # fofa+sub
-    domain_list = add2list(contont, fofa_new)
 
 
     # dnsx
-    contont = []
+    contont_dnx = []
     # domain = 'baidu.com'
     dnsx_file = dnsx(domain)
     if dnsx_file:
         file = open(f'.\\out\\{dnsx_file}', 'r')
         if os.path.isfile(f'.\\out\\{dnsx_file}'):
-            contont = file.readlines()
-            contont = 删除换行符(contont)
+            contont_dnx = file.readlines()
+            contont_dnx = 删除换行符(contont_dnx)
     else:
         print('[+]读取失败')
-    domain_list = add2list(contont, domain_list)
+    domain_list = add2list(contont_dnx, contont)
 
 
     # asset
@@ -115,7 +108,11 @@ if __name__ == '__main__':
         os.makedirs('.\\out\\')
     if not os.path.exists('.\\re\\'):
         os.makedirs('.\\re\\')
-    domainl = input("请输入扫描的子域名列表: ")
+    print(f'''[+] {Fore.YELLOW}注意!{Fore.RESET}
+[+] oneforall的配置文件在{Fore.RED}.\\lib\\OneForAll\\config\\api.py{Fore.RESET}
+[+] {Fore.YELLOW}该工具由EX & 面包狗共同制作开发{Fore.RESET}
+    ''')
+    domainl = input(f"{Fore.GREEN}请输入扫描的子域名列表: {Fore.RESET}")
     domainl = open(domainl, 'r')
     domains = [domain.replace('\n', '') for domain in domainl.readlines()]
     for domain in domains:
